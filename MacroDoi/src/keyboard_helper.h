@@ -134,18 +134,18 @@ class KeyboardListener {
 		/*
 		 * Registers a listener to be called when the keyboard's state changes.
 		 *
-		 * Pre: None.
+		 * Pre: The listener is not already registered
 		 *
 		 * Post: The listener will now be called when the keyboard's state changes.
 		 */
 		static void registerListener(KeyListener listener);
 
 		/*
-		 * Registers a listener to be called when the keyboard's state changes.
+		 * Unregisters a listener, so it will no longer be called when the keyboard's state changes.
 		 *
-		 * Pre: None.
+		 * Pre: The listener is registered.
 		 *
-		 * Post: The listener will now be called when the keyboard's state changes.
+		 * Post: The listener will no longer be called when the keyboard's state changes.
 		 */
 		static void unregisterListener(KeyListener listener);
 };

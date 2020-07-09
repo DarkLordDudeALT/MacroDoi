@@ -159,7 +159,12 @@ void KeyboardListener::tick() {
 }
 
 void KeyboardListener::registerListener(KeyListener listener) {
-	keyListeners.push_back(listener);
+	auto endIterator = keyListeners.end();
+	auto result = std::find(keyListeners.begin(), endIterator, listener);
+
+	// Ensures vector values are unique.
+	if (result == endIterator)
+		keyListeners.push_back(listener);
 }
 
 void KeyboardListener::unregisterListener(KeyListener listener) {
