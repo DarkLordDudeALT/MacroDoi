@@ -9,10 +9,22 @@
 #include <iostream>
 #include "keyboard_helper.h"
 
+void functin(KeyEvent& event) {
+	std::cout << event.getKey() << ", " << event.getFlags() << std::endl;
+}
+
 int main() {
-	pressVKey('A', false);
-	pressVKey('A', false);
-	pressVKey('A', false);
-	pressVKey('A', false);
+	KeyboardListener::initialize();
+
+
+	KeyboardListener::registerListener(functin);
+
+	while (true) {
+		KeyboardListener::tick();
+	}
+
+
+	KeyboardListener::uninitialize();
+
 	return 0;
 }

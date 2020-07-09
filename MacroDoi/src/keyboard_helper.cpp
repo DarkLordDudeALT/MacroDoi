@@ -1,5 +1,8 @@
 #include "keyboard_helper.h"
 
+#include <stdexcept>
+#include <vector>
+#include <algorithm>
 #include <windows.h>
 
 bool isKeyPressed(int virtualKey) {
@@ -9,6 +12,8 @@ bool isKeyPressed(int virtualKey) {
 bool isKeyToggled(int virtualKey) {
 	return GetAsyncKeyState(virtualKey) & 0x0001;
 }
+
+
 
 void pressVKey(int virtualKey, bool isUnicode) {
 	KEYBDINPUT keyPress;
@@ -86,4 +91,73 @@ void releaseVKey(int virtualKey, bool isUnicode) {
 	keyInput.ki = keyRelease;
 
 	SendInput(1, &keyInput, sizeof(INPUT));
+}
+
+
+
+KeyEvent::KeyEvent(int virtualKey, short flags) {
+	key = virtualKey;
+	this->flags = flags;
+}
+
+int KeyEvent::getKey() {
+	return key;
+}
+
+short KeyEvent::getFlags() {
+	return flags;
+}
+
+
+
+static bool initialized = false;
+static std::vector<KeyListener> keyListeners = std::vector<KeyListener>();
+static SHORT* previousKeyboard;
+
+void KeyboardListener::initialize() {
+	if (initialized)
+		throw std::logic_error("KeyboardListener is already initialized!");
+
+	initialized = true;
+	previousKeyboard = new SHORT[256];
+
+	for (int i = 0; i < 256; i++)
+		previousKeyboard[i] = GetAsyncKeyState(i);
+}
+
+void KeyboardListener::uninitialize() {
+	if (!initialized)
+		throw std::logic_error("KeyboardListener is not initialized!");
+
+	initialized = false;
+	delete[] previousKeyboard;
+}
+
+void KeyboardListener::tick() {
+	if (keyListeners.size())
+		// Looks for changes in the keys between last execution and now.
+		for (int i = 0; i < 256; i++) {
+			SHORT keyState = GetAsyncKeyState(i);
+			SHORT* previousKeyState = &previousKeyboard[i];
+
+			if (keyState != *previousKeyState) {
+				*previousKeyState = keyState;
+				KeyEvent keyEvent(i, keyState);
+
+				for (KeyListener listener : keyListeners)
+					listener(keyEvent);
+			}
+		}
+}
+
+void KeyboardListener::registerListener(KeyListener listener) {
+	keyListeners.push_back(listener);
+}
+
+void KeyboardListener::unregisterListener(KeyListener listener) {
+	auto endIterator = keyListeners.end();
+	auto result = std::find(keyListeners.begin(), endIterator, listener);
+
+	if (result != endIterator)
+		keyListeners.erase(result);
 }
