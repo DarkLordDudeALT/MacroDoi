@@ -1,7 +1,7 @@
 //============================================================================
-// Name        : MacroDoi.cpp
+// Name        : macrodoi.cpp
 // Author      : Epiphany
-// Version     : 1
+// Version     : null
 // Copyright   : I don't care lol
 // Description : Computer macros
 //============================================================================

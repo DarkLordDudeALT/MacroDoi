@@ -1,3 +1,13 @@
+//============================================================================
+// Name        : keyboard_helper.h
+// Author      : Epiphany
+// Version     : null
+// Copyright   : I don't care lol
+// Description : Stuff to help with manipulating the keyboard
+//============================================================================
+
+#pragma once
+
 /*
  * Gets whether or not the given key is pressed.
  *

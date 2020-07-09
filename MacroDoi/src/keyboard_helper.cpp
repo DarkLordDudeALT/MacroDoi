@@ -1,3 +1,11 @@
+//============================================================================
+// Name        : keyboard_helper.cpp
+// Author      : Epiphany
+// Version     : null
+// Copyright   : I don't care lol
+// Description : Implementation of keyboard_helper.h
+//============================================================================
+
 #include "keyboard_helper.h"
 
 #include <stdexcept>
