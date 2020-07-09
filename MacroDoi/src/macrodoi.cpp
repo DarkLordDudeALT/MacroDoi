@@ -6,6 +6,13 @@
 // Description : Computer macros
 //============================================================================
 
+#include <iostream>
+#include "keyboard_helper.h"
+
 int main() {
+	pressVKey('A', false);
+	pressVKey('A', false);
+	pressVKey('A', false);
+	pressVKey('A', false);
 	return 0;
 }
