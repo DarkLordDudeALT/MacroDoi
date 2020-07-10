@@ -48,15 +48,17 @@ class KeyAction {
 	public:
 		KeyAction();
 
-		KeyAction(int value, bool isWait);
+		KeyAction(int value, int flags);
 
 		int getValue();
 
 		bool isWait();
 
+		bool isUnicode();
+
 	private:
 		int value;
-		bool wait;
+		int flags;
 };
 
 
