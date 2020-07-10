@@ -70,7 +70,7 @@ int main() {
 	f.push_back(KeyAction('D', false));
 	f.push_back(KeyAction(200, true));
 	f.push_back(KeyAction(VK_RETURN, false));
-	f.push_back(KeyAction(400, true));
+	f.push_back(KeyAction(500, true));
 	f.push_back(KeyAction('S', false));
 	f.push_back(KeyAction('H', false));
 	f.push_back(KeyAction('U', false));
@@ -79,6 +79,9 @@ int main() {
 	f.push_back(KeyAction('O', false));
 	f.push_back(KeyAction('W', false));
 	f.push_back(KeyAction('N', false));
+	f.push_back(KeyAction(VK_SPACE, false));
+	f.push_back(KeyAction(VK_OEM_2, false));
+	f.push_back(KeyAction('S', false));
 	f.push_back(KeyAction(VK_SPACE, false));
 	f.push_back(KeyAction(VK_OEM_2, false));
 	f.push_back(KeyAction('F', false));
