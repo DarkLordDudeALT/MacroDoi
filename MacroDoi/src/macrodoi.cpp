@@ -94,7 +94,7 @@ int main() {
 
 	Macro macro1(new KeyboardActivator(a, 0.2), new KeyboardExecutor(b));
 	Macro macro2(new KeyboardActivator(c, 0.4), new KeyboardExecutor(d));
-	Macro macro3(new KeyboardActivator(e, 0.4), new KeyboardExecutor(f));
+	Macro macro3(new KeyboardActivator(e, 0.1), new KeyboardExecutor(f));
 
 
 	clock_t lastTime = clock();

@@ -13,19 +13,67 @@
 #include <vector>
 #include "../keyboard_helper.h"
 
+/*
+ * A keyboard activator decides when a macro should execute based on the state of the keyboard.
+ */
 class KeyboardActivator : public BaseMacroActivator {
 	public:
+		/*
+		 * Initializes KeyboardActivator.
+		 *
+		 * Pre: KeyboardActivator is not already initialized. KeyboardListener must be initialized beforehand.
+		 *
+		 * Post: KeyboardActivator is initialized.
+		 */
 		static void initialize();
 
+		/*
+		 * Uninitializes KeyboardActivator.
+		 *
+		 * Pre: KeyboardActivator is already initialized. KeyboardListener must not be uninitialized beforehand.
+		 *
+		 * Post: KeyboardActivator is uninitialized.
+		 */
 		static void uninitialize();
 
 
+		/*
+		 * Creates a new keyboard activator. The key-sequence is copied from activationKeys.
+		 * reactionTime is the amount of time the user has to press the next key, or else it will reset.
+		 *
+		 * Pre: activationKeys must have at least one element. Note: having only one element will lead to the macro repeating itself,
+		 * as Windows sends multiple messages for held keys.
+		 *
+		 * Post: A new keyboard activator is created.
+		 */
 		KeyboardActivator(std::vector<int> activationKeys, double reactionTime);
 
+		/*
+		 * Creates a copy of a keyboard activator.
+		 *
+		 * Pre: None.
+		 *
+		 * Post: A new keyboard activator is created.
+		 */
 		KeyboardActivator(const KeyboardActivator& otherActivator);
 
+		/*
+		 * Destroys a keyboard activator.
+		 *
+		 * Pre: None.
+		 *
+		 * Post: A keyboard activator is destroyed.
+		 */
 		~KeyboardActivator();
 
+		/*
+		 * Tests to see if the key-sequence has been entered, and returns the result.
+		 * deltaTime represents the time since last execution.
+		 *
+		 * Pre: None.
+		 *
+		 * Post: The result is returned.
+		 */
 		bool tryActivate(double deltaTime) override;
 
 	private:
@@ -44,16 +92,57 @@ class KeyboardActivator : public BaseMacroActivator {
 
 
 
+/*
+ * KeyActions represent the actions a keyboard executor should take when it executes.
+ */
 class KeyAction {
 	public:
+		/*
+		 * Creates a new key action. Only here for arrays.
+		 *
+		 * Pre: None.
+		 *
+		 * Post: A new key action is created..
+		 */
 		KeyAction();
 
+		/*
+		 * Creates a new key action. Flags are in big-edian order.
+		 * If the first flag is set, the value represents a time, in milliseconds, to wait.
+		 * If the second flag is set, the value represents a Unicode character.
+		 * Else, the value represents a Windows virtual key.
+		 *
+		 * Pre: None.
+		 *
+		 * Post: A new key action is created.
+		 */
 		KeyAction(int value, int flags);
 
+		/*
+		 * Gets the value of the key action.
+		 *
+		 * Pre: None.
+		 *
+		 * Post: Returns the value of the key action.
+		 */
 		int getValue();
 
+		/*
+		 * Gets whether or not this action represents a wait action.
+		 *
+		 * Pre: None.
+		 *
+		 * Post: Returns whether or not this action represents a wait action.
+		 */
 		bool isWait();
 
+		/*
+		 * Gets whether or not this action represents a Unicode key.
+		 *
+		 * Pre: None.
+		 *
+		 * Post: Returns whether or not this action represents a Unicode key.
+		 */
 		bool isUnicode();
 
 	private:
@@ -62,14 +151,46 @@ class KeyAction {
 };
 
 
+/*
+ * A keyboar eExecutor executes actions that involve the keyboard when a macro is activated.
+ */
 class KeyboardExecutor : public BaseMacroExecutor {
 	public:
+		/*
+		 * Creates a new keyboard executor, copying from a vector of key actions that represent what it should do.
+		 *
+		 * Pre: keys must have at least one element.
+		 *
+		 * Post: A new keyboard executor is created.
+		 */
 		KeyboardExecutor(std::vector<KeyAction> keys);
 
+		/*
+		 * Creates a copy of a keyboard executor.
+		 *
+		 * Pre: None.
+		 *
+		 * Post: A new keyboard executor is created.
+			 */
 		KeyboardExecutor(const KeyboardExecutor& otherExecutor);
 
+		/*
+		 * Destroys a keyboard executor.
+		 *
+		 * Pre: None.
+		 *
+		 * Post: A keyboard executor is destroyed.
+		 */
 		~KeyboardExecutor();
 
+		/*
+		 * Executes the functions of this macro.
+		 * Those functions include synthesizing key presses, and waiting.
+		 *
+		 * Pre: None.
+		 *
+		 * Post: The functions of this macro are executed.
+		 */
 		void execute() override;
 
 	private:

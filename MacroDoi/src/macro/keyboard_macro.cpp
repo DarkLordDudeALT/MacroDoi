@@ -15,6 +15,13 @@
 static std::vector<KeyboardActivator*> loadedActivators = std::vector<KeyboardActivator*>();
 static bool initialized = false;
 
+/*
+ * Receives key events and passes them onto keyboard activators.
+ *
+ * Pre: None.
+ *
+ * Post: Any loaded keyboard activators will receive the event, if it is a key-press.
+ */
 void queryActivators(KeyEvent& keyEvent) {
 	if (loadedActivators.size() && (keyEvent.getFlags() & 0x8000))
 		for (KeyboardActivator* activator : loadedActivators)
@@ -110,6 +117,13 @@ bool KeyboardActivator::tryActivate(double deltaTime) {
 	return false;
 }
 
+/*
+ * Advances or resets the macro based on the incoming key.
+ *
+ * Pre: None.
+ *
+ * Post: The macro might advance or reset.
+ */
 void KeyboardActivator::testKey(int key) {
 	if (activationKeys[currentKey] == key) {
 		if (currentKey != activationLength) {
@@ -128,10 +142,13 @@ void KeyboardActivator::testKey(int key) {
 
 KeyAction::KeyAction() {
 	value = 0;
-	flags = 0b00;
+	flags = 0b01;
 }
 
 KeyAction::KeyAction(int value, int flags) {
+	if ((flags & 0b11) == 0b11)
+		throw std::invalid_argument("A key action cannot be both a wait and Unicode!");
+
 	this->value = value;
 	this->flags = flags;
 }
@@ -172,8 +189,6 @@ KeyboardExecutor::KeyboardExecutor(const KeyboardExecutor& otherExecutor) {
 KeyboardExecutor::~KeyboardExecutor() {
 	delete[] keys;
 }
-
-// TODO Have the following function work with unicode keys.
 
 void KeyboardExecutor::execute() {
 	unsigned char heldKeys = 0b000;
