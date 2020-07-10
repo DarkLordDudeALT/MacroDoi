@@ -34,7 +34,7 @@ bool isKeyToggled(int virtualKey);
  *
  * Post: The given key is "pressed."
  */
-void pressVKey(int virtualKey, bool isUnicode);
+void pressVirtualKey(int virtualKey, bool isUnicode);
 
 /*
  * "Holds" the given key.
@@ -44,7 +44,7 @@ void pressVKey(int virtualKey, bool isUnicode);
  *
  * Post: The given key is "held."
  */
-void holdVKey(int virtualKey, bool isUnicode);
+void holdVirtualKey(int virtualKey, bool isUnicode);
 
 /*
  * "Releases" the given key.
@@ -54,7 +54,7 @@ void holdVKey(int virtualKey, bool isUnicode);
  *
  * Post: The given key is "released."
  */
-void releaseVKey(int virtualKey, bool isUnicode);
+void releaseVirtualKey(int virtualKey, bool isUnicode);
 
 
 

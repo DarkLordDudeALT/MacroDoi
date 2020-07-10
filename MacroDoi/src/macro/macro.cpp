@@ -10,7 +10,7 @@
 
 BaseMacroActivator::~BaseMacroActivator() {}
 
-bool BaseMacroActivator::tryActivate() {
+bool BaseMacroActivator::tryActivate(double deltaTime) {
 	return false;
 }
 
@@ -37,7 +37,7 @@ Macro::~Macro() {
 	delete executor;
 }
 
-void Macro::tick() {
-	if (activator->tryActivate())
+void Macro::tick(double deltaTime) {
+	if (activator->tryActivate(deltaTime))
 		executor->execute();
 }

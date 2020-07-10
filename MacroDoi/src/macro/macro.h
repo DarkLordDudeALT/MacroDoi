@@ -19,11 +19,11 @@ class BaseMacroActivator {
 		/*
 		 * Decides whether or not a macro should activate, and returns the result.
 		 *
-		 * Pre: Depends on extending classes.
+		 * Pre: Depends on extending classes. deltaTime must be greater than zero.
 		 *
 		 * Post: Whether or not the macro should activate, and returns the result.
 		 */
-		virtual bool tryActivate();
+		virtual bool tryActivate(double deltaTime);
 };
 
 
@@ -86,11 +86,11 @@ class Macro {
 		/*
 		 * Attempts to execute the macro by querying the activator.
 		 *
-		 * Pre: None.
+		 * Pre: deltaTime must be greater than 0.
 		 *
 		 * Post: The macro might execute.
 		 */
-		void tick();
+		void tick(double deltaTime);
 
 	private:
 		BaseMacroActivator* activator;

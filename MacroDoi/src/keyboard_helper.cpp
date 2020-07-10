@@ -23,7 +23,7 @@ bool isKeyToggled(int virtualKey) {
 
 
 
-void pressVKey(int virtualKey, bool isUnicode) {
+void pressVirtualKey(int virtualKey, bool isUnicode) {
 	KEYBDINPUT keyPress;
 
 	keyPress.time = 0;
@@ -55,7 +55,7 @@ void pressVKey(int virtualKey, bool isUnicode) {
 	SendInput(1, keyInputPointer, sizeof(INPUT));
 }
 
-void holdVKey(int virtualKey, bool isUnicode) {
+void holdVirtualKey(int virtualKey, bool isUnicode) {
 	KEYBDINPUT keyHold;
 
 	keyHold.time = 0;
@@ -78,7 +78,7 @@ void holdVKey(int virtualKey, bool isUnicode) {
 	SendInput(1, &keyInput, sizeof(INPUT));
 }
 
-void releaseVKey(int virtualKey, bool isUnicode) {
+void releaseVirtualKey(int virtualKey, bool isUnicode) {
 	KEYBDINPUT keyRelease;
 
 	keyRelease.time = 0;
@@ -139,6 +139,7 @@ void KeyboardListener::uninitialize() {
 
 	initialized = false;
 	delete[] previousKeyboard;
+	keyListeners.clear();
 }
 
 void KeyboardListener::tick() {
