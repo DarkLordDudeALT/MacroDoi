@@ -11,32 +11,38 @@
 #include "macro.h"
 
 #include <vector>
+#include <string>
 #include "../keyboard_helper.h"
+
+/*
+ * Code to enable keyboard macros.
+ */
+class KeyboardMacros {
+	public:
+		/*
+		 * Initializes KeyboardActivator and KeyboardExecutor.
+		 *
+		 * Pre: They are not already initialized. They must be initialized beforehand.
+		 *
+		 * Post: They are initialized.
+		 */
+		static void initialize();
+
+		/*
+		 * Uninitializes KeyboardActivator and KeyboardExecutor.
+		 *
+		 * Pre: They are already initialized. They must not be uninitialized beforehand.
+		 *
+		 * Post: They are uninitialized.
+		 */
+		static void uninitialize();
+};
 
 /*
  * A keyboard activator decides when a macro should execute based on the state of the keyboard.
  */
 class KeyboardActivator : public BaseMacroActivator {
 	public:
-		/*
-		 * Initializes KeyboardActivator.
-		 *
-		 * Pre: KeyboardActivator is not already initialized. KeyboardListener must be initialized beforehand.
-		 *
-		 * Post: KeyboardActivator is initialized.
-		 */
-		static void initialize();
-
-		/*
-		 * Uninitializes KeyboardActivator.
-		 *
-		 * Pre: KeyboardActivator is already initialized. KeyboardListener must not be uninitialized beforehand.
-		 *
-		 * Post: KeyboardActivator is uninitialized.
-		 */
-		static void uninitialize();
-
-
 		/*
 		 * Creates a new keyboard activator. The key-sequence is copied from activationKeys.
 		 * reactionTime is the amount of time the user has to press the next key, or else it will reset.
@@ -152,7 +158,7 @@ class KeyAction {
 
 
 /*
- * A keyboar eExecutor executes actions that involve the keyboard when a macro is activated.
+ * A keyboard Executor executes actions that involve the keyboard when a macro is activated.
  */
 class KeyboardExecutor : public BaseMacroExecutor {
 	public:
@@ -171,7 +177,7 @@ class KeyboardExecutor : public BaseMacroExecutor {
 		 * Pre: None.
 		 *
 		 * Post: A new keyboard executor is created.
-			 */
+		 */
 		KeyboardExecutor(const KeyboardExecutor& otherExecutor);
 
 		/*
