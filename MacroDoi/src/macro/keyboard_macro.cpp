@@ -19,8 +19,24 @@ static std::vector<KeyboardActivator*> loadedActivators = std::vector<KeyboardAc
 static bool initialized = false;
 
 
+/*
+ * djb2.
+ * Creates hash values for strings.
+ *
+ * Pre: None.
+ *
+ * Post: A string is hashed.
+ */
+static constexpr unsigned int computeHash(const char* string) {
+	unsigned int hash = 5381;
+	int c = 0;
 
-// TODO Make or find a string hasher and use it to shove a switch into getKeyFromString().
+	while (c = *string++)
+		hash = (hash << 5) + hash + c;
+
+	return hash;
+}
+
 /*
  * Converts the code-name of a key into its key code.
  * Returns -1 if no mapping was found.
@@ -30,303 +46,303 @@ static bool initialized = false;
  * Post: The mapped key code is returned, or -1.
  */
 static int getKeyFromString(std::string& string) {
-	// Why must you be like this C++?
-	if (string == "CANCEL")
-		return VK_CANCEL;
-	if (string == "BACK")
-		return VK_BACK;
-	if (string == "TAB")
-		return VK_TAB;
-	if (string == "CLEAR")
-		return VK_CLEAR;
-	if (string == "ENTER")
-		return VK_RETURN;
-	if (string == "SHIFT")
-		return VK_SHIFT;
-	if (string == "CONTROL")
-		return VK_CONTROL;
-	if (string == "ALT")
-		return VK_MENU;
-	if (string == "PAUSE")
-		return VK_PAUSE;
-	if (string == "CAPS_LOCK")
-		return VK_CAPITAL;
-	if (string == "KANA")
-		return VK_KANA;
-	if (string == "HANGUL")
-		return VK_HANGUL;
-	if (string == "JUNJA")
-		return VK_JUNJA;
-	if (string == "FINAL")
-		return VK_FINAL;
-	if (string == "HANJA")
-		return VK_HANJA;
-	if (string == "KANJA")
-		return VK_KANJI;
-	if (string == "ESCAPE")
-		return VK_ESCAPE;
-	if (string == "CONVERT")
-		return VK_CONVERT;
-	if (string == "NONCONVERT")
-		return VK_NONCONVERT;
-	if (string == "ACCEPT")
-		return VK_ACCEPT;
-	if (string == "MODECHANGE")
-		return VK_MODECHANGE;
-	if (string == "SPACE")
-		return VK_SPACE;
-	if (string == "PAGE_UP")
-		return VK_PRIOR;
-	if (string == "PAGE_DOWN")
-		return VK_NEXT;
-	if (string == "END")
-		return VK_END;
-	if (string == "HOME")
-		return VK_HOME;
-	if (string == "LEFT_ARROW")
-		return VK_UP;
-	if (string == "UP_ARROW")
-		return VK_UP;
-	if (string == "RIGHT_ARROW")
-		return VK_RIGHT;
-	if (string == "DOWN_ARROW")
-		return VK_DOWN;
-	if (string == "SELECT")
-		return VK_SELECT;
-	if (string == "PRINT")
-		return VK_PRINT;
-	if (string == "EXECUTE")
-		return VK_EXECUTE;
-	if (string == "PRINT_SCREEN")
-		return VK_SNAPSHOT;
-	if (string == "INSERT")
-		return VK_INSERT;
-	if (string == "DELETE")
-		return VK_DELETE;
-	if (string == "HELP")
-		return VK_HELP;
-	if (string == "0" ||
-		string == "1" ||
-		string == "2" ||
-		string == "3" ||
-		string == "4" ||
-		string == "5" ||
-		string == "6" ||
-		string == "7" ||
-		string == "8" ||
-		string == "9" ||
-		string == "0" ||
-		string == "A" ||
-		string == "B" ||
-		string == "C" ||
-		string == "D" ||
-		string == "E" ||
-		string == "F" ||
-		string == "G" ||
-		string == "H" ||
-		string == "I" ||
-		string == "J" ||
-		string == "K" ||
-		string == "L" ||
-		string == "M" ||
-		string == "N" ||
-		string == "O" ||
-		string == "P" ||
-		string == "Q" ||
-		string == "R" ||
-		string == "S" ||
-		string == "T" ||
-		string == "U" ||
-		string == "V" ||
-		string == "W" ||
-		string == "X" ||
-		string == "Y" ||
-		string == "Z")
-		return static_cast<int>(string[0]);
-	if (string == "L_WINDOWS")
-		return VK_LWIN;
-	if (string == "R_WINDOWS")
-		return VK_RWIN;
-	if (string == "APPS")
-		return VK_APPS;
-	if (string == "SLEEP")
-		return VK_SLEEP;
-	if (string == "NUMPAD_0")
-		return VK_NUMPAD0;
-	if (string == "NUMPAD_1")
-		return VK_NUMPAD1;
-	if (string == "NUMPAD_2")
-		return VK_NUMPAD2;
-	if (string == "NUMPAD_3")
-		return VK_NUMPAD3;
-	if (string == "NUMPAD_4")
-		return VK_NUMPAD4;
-	if (string == "NUMPAD_5")
-		return VK_NUMPAD5;
-	if (string == "NUMPAD_6")
-		return VK_NUMPAD6;
-	if (string == "NUMPAD_7")
-		return VK_NUMPAD7;
-	if (string == "NUMPAD_8")
-		return VK_NUMPAD8;
-	if (string == "NUMPAD_9")
-		return VK_NUMPAD9;
-	if (string == "MULTIPLY")
-		return VK_MULTIPLY;
-	if (string == "ADD")
-		return VK_ADD;
-	if (string == "SEPARATOR")
-		return VK_SEPARATOR;
-	if (string == "SUBTRACT")
-		return VK_SUBTRACT;
-	if (string == "DECIMAL")
-		return VK_DECIMAL;
-	if (string == "DIVIDE")
-		return VK_DIVIDE;
-	if (string == "F1")
-		return VK_F1;
-	if (string == "F2")
-		return VK_F2;
-	if (string == "F3")
-		return VK_F3;
-	if (string == "F4")
-		return VK_F4;
-	if (string == "F5")
-		return VK_F5;
-	if (string == "F6")
-		return VK_F6;
-	if (string == "F7")
-		return VK_F7;
-	if (string == "F8")
-		return VK_F8;
-	if (string == "F9")
-		return VK_F9;
-	if (string == "F10")
-		return VK_F10;
-	if (string == "F11")
-		return VK_F11;
-	if (string == "F12")
-		return VK_F12;
-	if (string == "F13")
-		return VK_F13;
-	if (string == "F14")
-		return VK_F14;
-	if (string == "F15")
-		return VK_F15;
-	if (string == "F16")
-		return VK_F16;
-	if (string == "F17")
-		return VK_F17;
-	if (string == "F18")
-		return VK_F18;
-	if (string == "F19")
-		return VK_F19;
-	if (string == "F20")
-		return VK_F20;
-	if (string == "F21")
-		return VK_F21;
-	if (string == "F22")
-		return VK_F22;
-	if (string == "F23")
-		return VK_F23;
-	if (string == "F24")
-		return VK_F24;
-	if (string == "NUMBER_LOCK")
-		return VK_NUMLOCK;
-	if (string == "SCROLL")
-		return VK_SCROLL;
-	if (string == "LEFT_SHIFT")
-		return VK_LSHIFT;
-	if (string == "RIGHT_SHIFT")
-		return VK_RSHIFT;
-	if (string == "LEFT_CONTROL")
-		return VK_LCONTROL;
-	if (string == "RIGHT_CONTROL")
-		return VK_RCONTROL;
-	if (string == "LEFT_ALT")
-		return VK_LMENU;
-	if (string == "RIGHT_ALT")
-		return VK_RMENU;
-	if (string == "BROWSER_BACK")
-		return VK_BROWSER_BACK;
-	if (string == "BROWSER_FORWARD")
-		return VK_BROWSER_FORWARD;
-	if (string == "BROWSER_REFRESH")
-		return VK_BROWSER_REFRESH;
-	if (string == "BROWSER_STOP")
-		return VK_BROWSER_STOP;
-	if (string == "BROWSER_SEARCH")
-		return VK_BROWSER_SEARCH;
-	if (string == "BROWSER_FAVORITES")
-		return VK_BROWSER_FAVORITES;
-	if (string == "BROWSER_HOME")
-		return VK_BROWSER_HOME;
-	if (string == "VOLUME_MUTE")
-		return VK_VOLUME_MUTE;
-	if (string == "VOLUME_DOWN")
-		return VK_VOLUME_DOWN;
-	if (string == "VOLUME_UP")
-		return VK_VOLUME_UP;
-	if (string == "NEXT_TRACK")
-		return VK_MEDIA_NEXT_TRACK;
-	if (string == "PREVIOUS_TRACK")
-		return VK_MEDIA_PREV_TRACK;
-	if (string == "MEDIA_STOP")
-		return VK_MEDIA_STOP;
-	if (string == "PLAY_PAUSE")
-		return VK_MEDIA_PLAY_PAUSE;
-	if (string == "LAUNCH_MAIL")
-		return VK_LAUNCH_MAIL;
-	if (string == "MEDIA_SELECT")
-		return VK_LAUNCH_MEDIA_SELECT;
-	if (string == "LAUNCH_APP1")
-		return VK_LAUNCH_APP1;
-	if (string == "LAUNCH_APP2")
-		return VK_LAUNCH_APP2;
-	if (string == "OEM_1")
-		return VK_OEM_1;
-	if (string == "PLUS")
-		return VK_OEM_PLUS;
-	if (string == "COMMA")
-		return VK_OEM_COMMA;
-	if (string == "MINUS")
-		return VK_OEM_MINUS;
-	if (string == "PERIOD")
-		return VK_OEM_PERIOD;
-	if (string == "OEM_2")
-		return VK_OEM_2;
-	if (string == "OEM_3")
-		return VK_OEM_3;
-	if (string == "OEM_4")
-		return VK_OEM_4;
-	if (string == "OEM_5")
-		return VK_OEM_5;
-	if (string == "OEM_6")
-		return VK_OEM_6;
-	if (string == "OEM_7")
-		return VK_OEM_7;
-	if (string == "OEM_8")
-		return VK_OEM_8;
-	if (string == "OEM_102")
-		return VK_OEM_102;
-	if (string == "PROCESS")
-		return VK_PROCESSKEY;
-	if (string == "ATTENTION")
-		return VK_ATTN;
-	if (string == "CRSEL")
-		return VK_CRSEL;
-	if (string == "EXSEL")
-		return VK_EXSEL;
-	if (string == "EREOF")
-		return VK_EREOF;
-	if (string == "PLAY")
-		return VK_PLAY;
-	if (string == "ZOOM")
-		return VK_ZOOM;
-	if (string == "PA1")
-		return VK_PA1;
-	if (string == "OEM_CLEAR")
-		return VK_OEM_CLEAR;
+	switch (computeHash(string.data())) {
+		case computeHash("CANCEL"):
+			return VK_CANCEL;
+		case computeHash("BACK"):
+			return VK_BACK;
+		case computeHash("TAB"):
+			return VK_TAB;
+		case computeHash("CLEAR"):
+			return VK_CLEAR;
+		case computeHash("ENTER"):
+				return VK_RETURN;
+		case computeHash("SHIFT"):
+			return VK_SHIFT;
+		case computeHash("CONTROL"):
+			return VK_CONTROL;
+		case computeHash("ALT"):
+			return VK_MENU;
+		case computeHash("PAUSE"):
+			return VK_PAUSE;
+		case computeHash("CAPS_LOCK"):
+			return VK_CAPITAL;
+		case computeHash("KANA"):
+			return VK_KANA;
+		case computeHash("HANGUL"):
+			return VK_HANGUL;
+		case computeHash("JUNJA"):
+			return VK_JUNJA;
+		case computeHash("FINAL"):
+			return VK_FINAL;
+		case computeHash("HANJA"):
+			return VK_HANJA;
+		case computeHash("KANJA"):
+			return VK_KANJI;
+		case computeHash("ESCAPE"):
+			return VK_ESCAPE;
+		case computeHash("CONVERT"):
+			return VK_CONVERT;
+		case computeHash("NONCONVERT"):
+			return VK_NONCONVERT;
+		case computeHash("ACCEPT"):
+			return VK_ACCEPT;
+		case computeHash("MODECHANGE"):
+			return VK_MODECHANGE;
+		case computeHash("SPACE"):
+			return VK_SPACE;
+		case computeHash("PAGE_UP"):
+			return VK_PRIOR;
+		case computeHash("PAGE_DOWN"):
+			return VK_NEXT;
+		case computeHash("END"):
+			return VK_END;
+		case computeHash("HOME"):
+			return VK_HOME;
+		case computeHash("LEFT_ARROW"):
+			return VK_UP;
+		case computeHash("UP_ARROW"):
+			return VK_UP;
+		case computeHash("RIGHT_ARROW"):
+			return VK_RIGHT;
+		case computeHash("DOWN_ARROW"):
+			return VK_DOWN;
+		case computeHash("SELECT"):
+			return VK_SELECT;
+		case computeHash("PRINT"):
+			return VK_PRINT;
+		case computeHash("EXECUTE"):
+			return VK_EXECUTE;
+		case computeHash("PRINT_SCREEN"):
+			return VK_SNAPSHOT;
+		case computeHash("INSERT"):
+			return VK_INSERT;
+		case computeHash("DELETE"):
+			return VK_DELETE;
+		case computeHash("HELP"):
+			return VK_HELP;
+		case computeHash("0"):
+		case computeHash("1"):
+		case computeHash("2"):
+		case computeHash("3"):
+		case computeHash("4"):
+		case computeHash("5"):
+		case computeHash("6"):
+		case computeHash("7"):
+		case computeHash("8"):
+		case computeHash("9"):
+		case computeHash("A"):
+		case computeHash("B"):
+		case computeHash("C"):
+		case computeHash("D"):
+		case computeHash("E"):
+		case computeHash("F"):
+		case computeHash("G"):
+		case computeHash("H"):
+		case computeHash("I"):
+		case computeHash("J"):
+		case computeHash("K"):
+		case computeHash("L"):
+		case computeHash("M"):
+		case computeHash("N"):
+		case computeHash("O"):
+		case computeHash("P"):
+		case computeHash("Q"):
+		case computeHash("R"):
+		case computeHash("S"):
+		case computeHash("T"):
+		case computeHash("U"):
+		case computeHash("V"):
+		case computeHash("W"):
+		case computeHash("X"):
+		case computeHash("Y"):
+		case computeHash("Z"):
+			return static_cast<int>(string[0]);
+		case computeHash("L_WINDOWS"):
+			return VK_LWIN;
+		case computeHash("R_WINDOWS"):
+			return VK_RWIN;
+		case computeHash("APPS"):
+			return VK_APPS;
+		case computeHash("SLEEP"):
+			return VK_SLEEP;
+		case computeHash("NUMPAD_0"):
+			return VK_NUMPAD0;
+		case computeHash("NUMPAD_1"):
+			return VK_NUMPAD1;
+		case computeHash("NUMPAD_2"):
+			return VK_NUMPAD2;
+		case computeHash("NUMPAD_3"):
+			return VK_NUMPAD3;
+		case computeHash("NUMPAD_4"):
+			return VK_NUMPAD4;
+		case computeHash("NUMPAD_5"):
+			return VK_NUMPAD5;
+		case computeHash("NUMPAD_6"):
+			return VK_NUMPAD6;
+		case computeHash("NUMPAD_7"):
+			return VK_NUMPAD7;
+		case computeHash("NUMPAD_8"):
+			return VK_NUMPAD8;
+		case computeHash("NUMPAD_9"):
+			return VK_NUMPAD9;
+		case computeHash("MULTIPLY"):
+			return VK_MULTIPLY;
+		case computeHash("ADD"):
+			return VK_ADD;
+		case computeHash("SEPARATOR"):
+			return VK_SEPARATOR;
+		case computeHash("SUBTRACT"):
+			return VK_SUBTRACT;
+		case computeHash("DECIMAL"):
+			return VK_DECIMAL;
+		case computeHash("DIVIDE"):
+			return VK_DIVIDE;
+		case computeHash("F1"):
+			return VK_F1;
+		case computeHash("F2"):
+			return VK_F2;
+		case computeHash("F3"):
+			return VK_F3;
+		case computeHash("F4"):
+			return VK_F4;
+		case computeHash("F5"):
+			return VK_F5;
+		case computeHash("F6"):
+			return VK_F6;
+		case computeHash("F7"):
+			return VK_F7;
+		case computeHash("F8"):
+			return VK_F8;
+		case computeHash("F9"):
+			return VK_F9;
+		case computeHash("F10"):
+			return VK_F10;
+		case computeHash("F11"):
+			return VK_F11;
+		case computeHash("F12"):
+			return VK_F12;
+		case computeHash("F13"):
+			return VK_F13;
+		case computeHash("F14"):
+			return VK_F14;
+		case computeHash("F15"):
+			return VK_F15;
+		case computeHash("F16"):
+			return VK_F16;
+		case computeHash("F17"):
+			return VK_F17;
+		case computeHash("F18"):
+			return VK_F18;
+		case computeHash("F19"):
+			return VK_F19;
+		case computeHash("F20"):
+			return VK_F20;
+		case computeHash("F21"):
+			return VK_F21;
+		case computeHash("F22"):
+			return VK_F22;
+		case computeHash("F23"):
+			return VK_F23;
+		case computeHash("F24"):
+			return VK_F24;
+		case computeHash("NUMBER_LOCK"):
+			return VK_NUMLOCK;
+		case computeHash("SCROLL"):
+			return VK_SCROLL;
+		case computeHash("LEFT_SHIFT"):
+			return VK_LSHIFT;
+		case computeHash("RIGHT_SHIFT"):
+			return VK_RSHIFT;
+		case computeHash("LEFT_CONTROL"):
+			return VK_LCONTROL;
+		case computeHash("RIGHT_CONTROL"):
+			return VK_RCONTROL;
+		case computeHash("LEFT_ALT"):
+			return VK_LMENU;
+		case computeHash("RIGHT_ALT"):
+			return VK_RMENU;
+		case computeHash("BROWSER_BACK"):
+			return VK_BROWSER_BACK;
+		case computeHash("BROWSER_FORWARD"):
+			return VK_BROWSER_FORWARD;
+		case computeHash("BROWSER_REFRESH"):
+			return VK_BROWSER_REFRESH;
+		case computeHash("BROWSER_STOP"):
+			return VK_BROWSER_STOP;
+		case computeHash("BROWSER_SEARCH"):
+			return VK_BROWSER_SEARCH;
+		case computeHash("BROWSER_FAVORITES"):
+			return VK_BROWSER_FAVORITES;
+		case computeHash("BROWSER_HOME"):
+			return VK_BROWSER_HOME;
+		case computeHash("VOLUME_MUTE"):
+			return VK_VOLUME_MUTE;
+		case computeHash("VOLUME_DOWN"):
+			return VK_VOLUME_DOWN;
+		case computeHash("VOLUME_UP"):
+			return VK_VOLUME_UP;
+		case computeHash("NEXT_TRACK"):
+			return VK_MEDIA_NEXT_TRACK;
+		case computeHash("PREVIOUS_TRACK"):
+			return VK_MEDIA_PREV_TRACK;
+		case computeHash("MEDIA_STOP"):
+			return VK_MEDIA_STOP;
+		case computeHash("PLAY_PAUSE"):
+			return VK_MEDIA_PLAY_PAUSE;
+		case computeHash("LAUNCH_MAIL"):
+			return VK_LAUNCH_MAIL;
+		case computeHash("MEDIA_SELECT"):
+			return VK_LAUNCH_MEDIA_SELECT;
+		case computeHash("LAUNCH_APP1"):
+			return VK_LAUNCH_APP1;
+		case computeHash("LAUNCH_APP2"):
+			return VK_LAUNCH_APP2;
+		case computeHash("OEM_1"):
+			return VK_OEM_1;
+		case computeHash("PLUS"):
+			return VK_OEM_PLUS;
+		case computeHash("COMMA"):
+			return VK_OEM_COMMA;
+		case computeHash("MINUS"):
+			return VK_OEM_MINUS;
+		case computeHash("PERIOD"):
+			return VK_OEM_PERIOD;
+		case computeHash("OEM_2"):
+			return VK_OEM_2;
+		case computeHash("OEM_3"):
+			return VK_OEM_3;
+		case computeHash("OEM_4"):
+			return VK_OEM_4;
+		case computeHash("OEM_5"):
+			return VK_OEM_5;
+		case computeHash("OEM_6"):
+			return VK_OEM_6;
+		case computeHash("OEM_7"):
+			return VK_OEM_7;
+		case computeHash("OEM_8"):
+			return VK_OEM_8;
+		case computeHash("OEM_102"):
+			return VK_OEM_102;
+		case computeHash("PROCESS"):
+			return VK_PROCESSKEY;
+		case computeHash("ATTENTION"):
+			return VK_ATTN;
+		case computeHash("CRSEL"):
+			return VK_CRSEL;
+		case computeHash("EXSEL"):
+			return VK_EXSEL;
+		case computeHash("EREOF"):
+			return VK_EREOF;
+		case computeHash("PLAY"):
+			return VK_PLAY;
+		case computeHash("ZOOM"):
+			return VK_ZOOM;
+		case computeHash("PA1"):
+			return VK_PA1;
+		case computeHash("OEM_CLEAR"):
+			return VK_OEM_CLEAR;
+	}
 
 	return -1;
 }

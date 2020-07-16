@@ -37,11 +37,12 @@ void MacroLoader::loadMacrosFromFile() {
 	for (std::string line; std::getline(macroFile, line);) {
 		BaseMacroActivator* activator;
 
-		if (line == "" || line == "\n")
-			continue;
+		for (auto lineIterator = line.begin(); lineIterator < line.end(); lineIterator++)
+			if (*lineIterator == ' ' || *lineIterator == '\n' || *lineIterator == '\r')
+				line.erase(lineIterator);
 
-		if (line.at(line.size() - 1) == '\n')
-			line.erase(line.end() - 1);
+		if (line == "")
+			continue;
 
 		bool fail = false;
 		std::stringstream lineStream(line);
