@@ -22,6 +22,7 @@ static std::vector<Macro*> loadedMacros = std::vector<Macro*>();
 static std::unordered_map<std::string, ActivatorConstructor> activatorConstructors = std::unordered_map<std::string, ActivatorConstructor>();
 static std::unordered_map<std::string, ExecutorConstructor> executorConstructors = std::unordered_map<std::string, ExecutorConstructor>();
 
+// TODO Add comments to macro loading.
 void MacroLoader::loadMacrosFromFile() {
 	if (loaded)
 		throw std::logic_error("Macros are already loaded!");
@@ -41,7 +42,7 @@ void MacroLoader::loadMacrosFromFile() {
 			if (*lineIterator == ' ' || *lineIterator == '\n' || *lineIterator == '\r')
 				line.erase(lineIterator);
 
-		if (line == "")
+		if (line == "" || line[0] == '#')
 			continue;
 
 		bool fail = false;
