@@ -382,7 +382,7 @@ static BaseMacroActivator* createActivator(std::string& data) {
 	}
 
 	if (!keys.size()) {
-		std::cout << "Unable to find key sequence for key activator from: " << data << std::endl;
+		std::cout << "Error: There must be at least one valid key. Rejected: " << data << std::endl;
 		return nullptr;
 	}
 
@@ -397,6 +397,11 @@ static BaseMacroActivator* createActivator(std::string& data) {
 
 	} catch(std::invalid_argument& exception) {
 		std::cout << "Unable to find reaction time for key activator from: " << data << std::endl;
+		return nullptr;
+	}
+
+	if (reactionTime <= 0) {
+		std::cout << "Error: Reaction time must be greater than zero. Rejected: " << data << std::endl;
 		return nullptr;
 	}
 
@@ -573,7 +578,7 @@ static BaseMacroExecutor* createExecutor(std::string& data) {
 	}
 
 	if (!keyActions.size()) {
-		std::cout << "Unable to find key sequence for key executor from: " << data << std::endl;
+		std::cout << "Error: There must be at least one valid key. Rejected: " << data << std::endl;
 		return nullptr;
 	}
 
