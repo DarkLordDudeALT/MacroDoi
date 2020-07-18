@@ -104,6 +104,14 @@ void MacroLoader::loadMacrosFromFile() {
 	}
 
 	macroFile.close();
+
+	if (!loadedMacros.size()) {
+		std::cout << "Unable to load any macros. Exiting program" << std::endl;
+		exit(-1);
+	}
+
+	std::cout << std::endl << "Macros loaded." << std::endl;
+
 	loaded = true;
 }
 
