@@ -37,16 +37,22 @@ void MacroLoader::loadMacrosFromFile() {
 	for (std::string line; std::getline(macroFile, line);) {
 		BaseMacroActivator* activator;
 
+		// Removes comments.
+		size_t findResult = line.find('#');
+
+		if (findResult != (size_t) -1)
+			line.replace(findResult, line.length() - findResult, "");
+
 		for (auto lineIterator = line.begin(); lineIterator < line.end(); lineIterator++)
 			if (*lineIterator == ' ' || *lineIterator == '\n' || *lineIterator == '\r' || *lineIterator == '\t')
 				line.erase(lineIterator);
 
-		if (line == "" || line[0] == '#')
+		if (line == "")
 			continue;
 
-		bool fail = false;
 		std::stringstream lineStream(line);
 		std::string token;
+		bool fail = false;
 
 		// Gets activator.
 		if (std::getline(lineStream, token, ':')) {
