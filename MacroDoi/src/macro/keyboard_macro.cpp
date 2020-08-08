@@ -419,7 +419,7 @@ static BaseMacroActivator* createActivator(std::string& data) {
  * Post: Any loaded keyboard activators will receive the event, if it is a key-press.
  */
 void queryActivators(KeyEvent& keyEvent) {
-	if (loadedActivators.size() && (keyEvent.getFlags() & 0x8000))
+	if (loadedActivators.size() && !(keyEvent.getFlags() & 0x8000))
 		for (KeyboardActivator* activator : loadedActivators)
 			activator->testKey(keyEvent.getKey());
 }
@@ -510,11 +510,6 @@ void KeyboardActivator::testKey(int key) {
 			currentKey++;
 			timeRemaining = reactionTime;
 		}
-
-	// activationKeys[currentKey - 1] != key prevents multiple events of the same key from interfering.
-	} else if (currentKey && activationKeys[currentKey - 1] != key){
-		currentKey = 0;
-		timeRemaining = reactionTime;
 	}
 }
 
