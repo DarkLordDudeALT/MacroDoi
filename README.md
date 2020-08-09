@@ -9,3 +9,5 @@ All macros come in this form: activatorName|parameter1;parameter2;...parameterN:
 
 
 At the moment, only key macros are implemented. 
+
+Check the wiki for details.
