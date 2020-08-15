@@ -91,7 +91,6 @@ class KeyboardActivator : public BaseMacroActivator {
 		double reactionTime;
 		double timeRemaining;
 		size_t currentKey = 0;
-		bool wasExecuted = false;
 
 	friend void queryActivators(KeyEvent& keyEvent);
 };

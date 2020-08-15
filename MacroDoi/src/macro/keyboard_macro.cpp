@@ -419,7 +419,7 @@ static BaseMacroActivator* createActivator(std::string& data) {
  * Post: Any loaded keyboard activators will receive the event, if it is a key-press.
  */
 void queryActivators(KeyEvent& keyEvent) {
-	if (loadedActivators.size() && !(keyEvent.getFlags() & 0x8000))
+	if (loadedActivators.size() && (keyEvent.getFlags() & 0x8000) && keyEvent.getTimesPulled() == 1)
 		for (KeyboardActivator* activator : loadedActivators)
 			activator->testKey(keyEvent.getKey());
 }
@@ -452,7 +452,6 @@ KeyboardActivator::KeyboardActivator(const KeyboardActivator& otherActivator) {
 	reactionTime = otherActivator.reactionTime;
 	timeRemaining = otherActivator.timeRemaining;
 	currentKey = otherActivator.currentKey;
-	wasExecuted = otherActivator.wasExecuted;
 
 	loadedActivators.push_back(this);
 }
@@ -463,25 +462,8 @@ KeyboardActivator::~KeyboardActivator() {
 }
 
 bool KeyboardActivator::tryActivate(double deltaTime) {
-	// Prevents macro from being spammed.
-	if (wasExecuted) {
-		bool allKeysReleased = true;
-
-		for (size_t i = 0; i < activationLength; i++)
-			if (isKeyPressed(activationKeys[i])) {
-				allKeysReleased = false;
-				break;
-			}
-
-		if (!allKeysReleased)
-			return false;
-
-		wasExecuted = false;
-	}
-
 	if (currentKey == activationLength) {
 		currentKey = 0;
-		wasExecuted = true;
 
 		return true;
 
@@ -505,11 +487,9 @@ bool KeyboardActivator::tryActivate(double deltaTime) {
  * Post: The macro might advance or reset.
  */
 void KeyboardActivator::testKey(int key) {
-	if (activationKeys[currentKey] == key) {
-		if (currentKey != activationLength) {
-			currentKey++;
-			timeRemaining = reactionTime;
-		}
+	if (activationKeys[currentKey] == key && currentKey != activationLength) {
+		currentKey++;
+		timeRemaining = reactionTime;
 	}
 }
 

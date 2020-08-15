@@ -71,7 +71,7 @@ class KeyEvent {
 		 *
 		 * Post: A new key event is created.
 		 */
-		KeyEvent(int virtualKey, short flags);
+		KeyEvent(int virtualKey, short flags, unsigned int timesPulled);
 
 		/*
 		 * Gets the key that was changed.
@@ -91,9 +91,19 @@ class KeyEvent {
 		 */
 		short getFlags();
 
+		/*
+		 * Gets the number of times the key has been updated since initial press.
+		 *
+		 * Pre: None.
+		 *
+		 * Post: Returns the number of times the key has been updated since initial press.
+		 */
+		unsigned int getTimesPulled();
+
 	private:
 		int key;
 		int flags;
+		unsigned int timesPulled;
 };
 
 

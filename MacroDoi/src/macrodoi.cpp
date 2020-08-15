@@ -11,6 +11,8 @@
 #include "macro/keyboard_macro.h"
 #include "macro_loader.h"
 
+// TODO Allow instance-based key-listener registration with interfaces.
+
 int main() {
 	KeyboardListener::initialize();
 	KeyboardMacros::initialize();

@@ -55,11 +55,11 @@ void MacroLoader::loadMacrosFromFile() {
 		bool fail = false;
 
 		// Gets activator.
-		if (std::getline(lineStream, token, ':')) {
+		if (std::getline(lineStream, token, '|')) {
 			std::stringstream activatorStream(token);
 			std::string secondaryToken;
 
-			if (std::getline(activatorStream, secondaryToken, '|')) {
+			if (std::getline(activatorStream, secondaryToken, ':')) {
 				std::string activatorName(secondaryToken);
 
 				if (activatorConstructors.find(activatorName) != activatorConstructors.end() && std::getline(activatorStream, secondaryToken, '|')) {
@@ -82,11 +82,11 @@ void MacroLoader::loadMacrosFromFile() {
 		}
 
 		// Gets executor.
-		if (std::getline(lineStream, token, ':')) {
+		if (std::getline(lineStream, token, '|')) {
 			std::stringstream executorStream(token);
 			std::string secondaryToken;
 
-			if (std::getline(executorStream, secondaryToken, '|')) {
+			if (std::getline(executorStream, secondaryToken, ':')) {
 				std::string executorName(secondaryToken);
 
 				if (executorConstructors.find(executorName) != executorConstructors.end() && std::getline(executorStream, secondaryToken, '|')) {

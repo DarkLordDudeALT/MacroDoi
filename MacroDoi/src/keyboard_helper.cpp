@@ -103,9 +103,10 @@ void releaseVirtualKey(int virtualKey, bool isUnicode) {
 
 
 
-KeyEvent::KeyEvent(int virtualKey, short flags) {
+KeyEvent::KeyEvent(int virtualKey, short flags, unsigned int timesPulled) {
 	key = virtualKey;
 	this->flags = flags;
+	this->timesPulled = timesPulled;
 }
 
 int KeyEvent::getKey() {
@@ -116,11 +117,16 @@ short KeyEvent::getFlags() {
 	return flags;
 }
 
+unsigned int KeyEvent::getTimesPulled() {
+	return timesPulled;
+}
+
 
 
 static bool initialized = false;
 static std::vector<KeyListener> keyListeners = std::vector<KeyListener>();
 static SHORT* previousKeyboard;
+static unsigned int* timesPulled;
 
 void KeyboardListener::initialize() {
 	if (initialized)
@@ -128,6 +134,7 @@ void KeyboardListener::initialize() {
 
 	initialized = true;
 	previousKeyboard = new SHORT[256];
+	timesPulled = new unsigned int[256];
 
 	for (int i = 0; i < 256; i++)
 		previousKeyboard[i] = GetAsyncKeyState(i);
@@ -151,7 +158,15 @@ void KeyboardListener::tick() {
 
 			if (keyState != *previousKeyState) {
 				*previousKeyState = keyState;
-				KeyEvent keyEvent(i, keyState);
+
+				if (keyState & 0x8000) {
+					timesPulled[i]++;
+
+				} else
+					timesPulled[i] = 0;
+
+
+				KeyEvent keyEvent(i, keyState, timesPulled[i]);
 
 				for (KeyListener listener : keyListeners)
 					listener(keyEvent);
