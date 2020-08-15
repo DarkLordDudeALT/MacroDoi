@@ -13,7 +13,11 @@
 #include <sstream>
 #include <iostream>
 #include <windows.h>
+#include <thread>
+#include <chrono>
 #include "../macro_loader.h"
+
+using namespace std;
 
 static std::vector<KeyboardActivator*> loadedActivators = std::vector<KeyboardActivator*>();
 static bool initialized = false;
@@ -31,7 +35,7 @@ static constexpr unsigned int computeHash(const char* string) {
 	unsigned int hash = 5381;
 	int c = 0;
 
-	while (c = *string++)
+	while ((c = *string++))
 		hash = (hash << 5) + hash + c;
 
 	return hash;
@@ -490,6 +494,10 @@ void KeyboardActivator::testKey(int key) {
 	if (activationKeys[currentKey] == key && currentKey != activationLength) {
 		currentKey++;
 		timeRemaining = reactionTime;
+
+	} else if (currentKey) {
+		currentKey = 0;
+		timeRemaining = reactionTime;
 	}
 }
 
@@ -657,7 +665,7 @@ void KeyboardExecutor::execute() {
 			}
 
 		} else
-			Sleep(keyCode);
+			this_thread::sleep_for(chrono::milliseconds(keyCode));
 	}
 }
 

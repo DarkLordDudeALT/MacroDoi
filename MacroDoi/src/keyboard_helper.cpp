@@ -144,9 +144,10 @@ void KeyboardListener::uninitialize() {
 	if (!initialized)
 		throw std::logic_error("KeyboardListener is not initialized!");
 
+	keyListeners.clear();
 	initialized = false;
 	delete[] previousKeyboard;
-	keyListeners.clear();
+	delete[] timesPulled;
 }
 
 void KeyboardListener::tick() {
