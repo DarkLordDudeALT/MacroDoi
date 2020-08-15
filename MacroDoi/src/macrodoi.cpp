@@ -6,7 +6,6 @@
 // Description : Computer macros
 //============================================================================
 
-#include <windows.h>
 #include <time.h>
 #include "macro/keyboard_macro.h"
 #include "macro_loader.h"
