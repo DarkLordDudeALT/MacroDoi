@@ -1,4 +1,4 @@
-Смотреть на другом языке: [English](../master/README.md "View in English), [toki pona](../master/README.tok.md "lukin kepeken toki pona")
+Смотреть на другом языке: [English](../master/README.md "View in English"), [toki pona](../master/README.tok.md "lukin kepeken toki pona")
 
 # MacroDoi (МакроДой)
 Я с мамой смотрел серию Офиса. В серии Джим на компьютер Дуайта поставляет макрос. Я думал, что бы будет хорошо, если бы были макросы у моего компьютера. Также думал, что бы будет забавно использовать против кого-либо. 
