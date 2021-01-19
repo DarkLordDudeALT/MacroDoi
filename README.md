@@ -1,3 +1,5 @@
+View in a different language: [Русский](../master/README.ru_ru.md "Смотреть на русском"), [toki pona](../master/README.tok.md "lukin kepeken toki pona")
+
 # MacroDoi
 
 I was watching an episode of the office with my mom. In the episode, Jim puts a macro on Dwight's computer. 
