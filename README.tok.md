@@ -5,9 +5,8 @@ mi en mama mi li lukin e sitelen tawa The Office. lon sitelen la jan Jim li pana
 
 tan ni la mi pali e lipu pi pali sitelen pi ilo nanpa. lipu li pali e pali sitelen tan poki sitelen. ona li wile jo e nimi "macros.txt" li wile lon poki pi sama mute.
 
-pali sitelen ali li sama ni:
-nimiActivator: ijo1; ijo2; ... ijoN | nimiExecutor: ijo1; ijo2; ... ijoN
+pali sitelen ali li sama ni: nimiActivator: ijo1; ijo2; ... ijoN | nimiExecutor: ijo1; ijo2; ... ijoN
 
 tenpo ni la pali sitelen Key taso li lon.
 
-o lukin e poki sona Wiki tawa sona.
+o lukin e lipu Wiki tawa sona mute.
