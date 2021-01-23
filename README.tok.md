@@ -1,4 +1,4 @@
-lukin kepeken toki ante: [English](../master/README.md "View in English"), [Русский](../master/README.ru_ru.md "Смотреть на русском")
+lukin kepeken toki ante: [English](../master/README.md "View in English"), [Русский](../master/README.ru-RU.md "Смотреть на русском")
 
 # MakoDo (MacroDoi)
 mi en mama mi li lukin e sitelen tawa The Office. lon sitelen la jan Jim li pana e lipu pi pali sitelen pi ilo nanpa lon ilo nanpa Dwight. mi pilin e ni: lipu pi pali sitelen lon ilo nanpa mi li pona. mi pilin sin e ni: ni li musi: mi utala e jan kepeken ona.
