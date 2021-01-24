@@ -11,3 +11,6 @@ All macros come in this form: activatorName: parameter1; parameter2; ... paramet
 At the moment, only key macros are implemented. 
 
 Check the wiki for details.
+
+## Links
+Demonstration video: https://www.youtube.com/watch?v=FEPOceLIEXE
