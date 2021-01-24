@@ -10,3 +10,6 @@ pali sitelen ali li sama ni: nimiPiOpenPiPaliSitelen: ijo1; ijo2; ... ijoN | nim
 tenpo ni la pali sitelen Key taso li lon.
 
 o lukin e lipu Wiki tawa sona mute.
+
+## lupa tawa lipu ante
+[sitelen tawa pana](https://www.youtube.com/watch?v=FEPOceLIEXE "pana MakoDo")
