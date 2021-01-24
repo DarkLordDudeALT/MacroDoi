@@ -13,4 +13,4 @@ At the moment, only key macros are implemented.
 Check the wiki for details.
 
 ## Links
-Demonstration video: https://www.youtube.com/watch?v=FEPOceLIEXE
+[Demonstration Video](https://www.youtube.com/watch?v=FEPOceLIEXE "MacroDoi Demonstration")
