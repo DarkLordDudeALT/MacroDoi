@@ -10,7 +10,7 @@ All macros come in this form: *activatorName: parameter1; parameter2; ... parame
 
 At the moment, only key macros are implemented. 
 
-Check the wiki for details.
+Check the [wiki](../../wiki/Home) for details.
 
 ## Links
 [Demonstration Video](https://www.youtube.com/watch?v=FEPOceLIEXE "MacroDoi Demonstration")
