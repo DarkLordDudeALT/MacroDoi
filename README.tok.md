@@ -12,4 +12,4 @@ tenpo ni la pali sitelen Key taso li lon.
 o lukin e [lipu Wiki](../../wiki/Home-tok "lipu lawa Wiki MakoDo toki pona") tawa sona mute.
 
 ## lupa tawa lipu ante
-[sitelen tawa pana](https://www.youtube.com/watch?v=FEPOceLIEXE "pana MakoDo")
+[sitelen tawa pana (li jo e toki sitelen)](https://www.youtube.com/watch?v=FEPOceLIEXE "pana MakoDo")
