@@ -1,10 +1,6 @@
-//============================================================================
-// Name        : macro_loader.cpp
-// Author      : Epiphany
-// Version     : null
-// Copyright   : I don't care lol
-// Description : Implementation of macro_loader.h
-//============================================================================
+/**
+ * Implementation of macro_loader.h.
+ */
 
 #include "macro_loader.h"
 

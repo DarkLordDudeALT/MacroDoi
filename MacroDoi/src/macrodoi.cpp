@@ -1,10 +1,6 @@
-//============================================================================
-// Name        : macrodoi.cpp
-// Author      : Epiphany
-// Version     : null
-// Copyright   : I don't care lol
-// Description : Computer macros
-//============================================================================
+/**
+ * Computer macros.
+ */
 
 #include <chrono>
 #include <thread>
@@ -14,8 +10,10 @@
 
 using namespace std;
 
-// TODO Allow instance-based key-listener registration with interfaces.
-// TODO Allow macros to invoke other macros. Make a label activator, and an executor to trigger it.
+// TODO Have key macros operate on their own timers and threads so that others can activate.
+// TODO Have constructor error messages be more useful.
+// TODO Label components. When one is executed, all following activators are activated. Resets at end of file or when another is activated.
+// TODO Pass components. When one is executed, it does nothing. When one is activated, it activates the macro, no questions asked.
 
 int main() {
 	KeyboardListener::initialize();
@@ -33,7 +31,7 @@ int main() {
 		MacroLoader::tick(deltaTime);
 
 		if (deltaTime < 0.03)
-			this_thread::sleep_for(chrono::milliseconds(30 - static_cast<int>(deltaTime / 1000)));
+			this_thread::sleep_for(chrono::duration<double>(0.03 - deltaTime));
 	}
 
 

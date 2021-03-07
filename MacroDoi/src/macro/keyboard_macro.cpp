@@ -1,10 +1,6 @@
-//============================================================================
-// Name        : keyboard_macro.cpp
-// Author      : Epiphany
-// Version     : null
-// Copyright   : I don't care lol
-// Description : Implements keyboard_macro.h
-//============================================================================
+/**
+ * Implements keyboard_macro.h.
+ */
 
 #include "keyboard_macro.h"
 
@@ -23,13 +19,14 @@ static std::vector<KeyboardActivator*> loadedActivators = std::vector<KeyboardAc
 static bool initialized = false;
 
 
-/*
+
+/**
  * djb2.
- * Creates hash values for strings.
+ * Computes a hash value for the given string.
  *
- * Pre: None.
+ * @param string The string to compute a hash value for.
  *
- * Post: A string is hashed.
+ * @returns The hash value for the given string
  */
 static constexpr unsigned int computeHash(const char* string) {
 	unsigned int hash = 5381;
@@ -41,13 +38,13 @@ static constexpr unsigned int computeHash(const char* string) {
 	return hash;
 }
 
+// TODO Not all keys are in this.
 /*
  * Converts the code-name of a key into its key code.
- * Returns -1 if no mapping was found.
  *
- * Pre: None.
+ * @param string The code-name of a key.
  *
- * Post: The mapped key code is returned, or -1.
+ * @returns The equivalent key code, or -1, if no mapping was found.
  */
 static int getKeyFromString(std::string& string) {
 	switch (computeHash(string.data())) {
@@ -356,9 +353,7 @@ static int getKeyFromString(std::string& string) {
 /*
  * Creates a new keyboard activator from string data, used for loading from file.
  *
- * Pre: The data contains a set of keys with at least one element, and a double.
- *
- * Post: A new keyboard activator is placed onto the heap.
+ * @param data The data to create a keyboard activator from.
  */
 static BaseMacroActivator* createActivator(std::string& data) {
 	std::vector<int> keys;
@@ -418,9 +413,7 @@ static BaseMacroActivator* createActivator(std::string& data) {
 /*
  * Receives key events and passes them onto keyboard activators.
  *
- * Pre: None.
- *
- * Post: Any loaded keyboard activators will receive the event, if it is a key-press.
+ * @param keyEvent The key event to pass onto the keyboard activators.
  */
 void queryActivators(KeyEvent& keyEvent) {
 	if (loadedActivators.size() && (keyEvent.getFlags() & 0x8000) && keyEvent.getTimesPulled() == 1)
@@ -486,9 +479,7 @@ bool KeyboardActivator::tryActivate(double deltaTime) {
 /*
  * Advances or resets the macro based on the incoming key.
  *
- * Pre: None.
- *
- * Post: The macro might advance or reset.
+ * @param key The key that was pressed.
  */
 void KeyboardActivator::testKey(int key) {
 	if (activationKeys[currentKey] == key && currentKey != activationLength) {
@@ -533,9 +524,7 @@ bool KeyAction::isUnicode() {
 /*
  * Creates a new keyboard executor from string data, used for loading from file.
  *
- * Pre: The data contains a set of keys with at least one element.
- *
- * Post: A new keyboard executor is placed onto the heap.
+ * @param data The data to create a keyboard executor from.
  */
 static BaseMacroExecutor* createExecutor(std::string& data) {
 	std::vector<KeyAction> keyActions;
@@ -677,7 +666,7 @@ void KeyboardMacros::initialize() {
 
 	KeyboardListener::registerListener(queryActivators);
 	MacroLoader::registerConstructor("Key", createActivator);
-	MacroLoader::registerConstructor("Key", createExecutor);
+	MacroLoader::registerConstructor("Key", createExecutor); // @suppress("Ambiguous problem")
 }
 
 void KeyboardMacros::uninitialize() {

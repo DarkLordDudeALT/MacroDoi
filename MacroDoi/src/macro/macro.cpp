@@ -1,10 +1,6 @@
-//============================================================================
-// Name        : macro.cpp
-// Author      : Epiphany
-// Version     : null
-// Copyright   : I don't care lol
-// Description : Implementation of macro.h
-//============================================================================
+/**
+ * Implementation of macro.h.
+ */
 
 #include "macro.h"
 

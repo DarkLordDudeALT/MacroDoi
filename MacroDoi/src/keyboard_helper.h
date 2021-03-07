@@ -1,58 +1,46 @@
-//============================================================================
-// Name        : keyboard_helper.h
-// Author      : Epiphany
-// Version     : null
-// Copyright   : I don't care lol
-// Description : Stuff to help with manipulating the keyboard
-//============================================================================
+/**
+ * Stuff to help with manipulating the keyboard.
+ */
 
 #pragma once
 
 /*
  * Gets whether or not the given key is pressed.
  *
- * Pre: None.
- *
- * Post: Returns whether or not the given key is pressed.
+ * @param virtualKey The id of the virtual key.
  */
 bool isKeyPressed(int virtualKey);
 
 /*
  * Gets whether or not the given key is toggled.
  *
- * Pre: None.
+ * @param virtualKey The id of the virtual key.
  *
- * Post: Returns whether or not the given key is toggled.
+ * @returns Returns whether or not the given key is toggled.
  */
 bool isKeyToggled(int virtualKey);
 
 /*
  * "Presses" the given key.
  *
- * Pre: If the given key is a unicode value, isUnicode must be true.
- * Else, it must be false.
- *
- * Post: The given key is "pressed."
+ * @param virtualKey The id of the virtual key.
+ * @param isUnicode Whether the virtual key stands for a unicode character.
  */
 void pressVirtualKey(int virtualKey, bool isUnicode);
 
 /*
  * "Holds" the given key.
  *
- * Pre: If the given key is a unicode value, isUnicode must be true.
- * Else, it must be false.
- *
- * Post: The given key is "held."
+ * @param virtualKey The id of the virtual key.
+ * @param isUnicode Whether the virtual key stands for a unicode character.
  */
 void holdVirtualKey(int virtualKey, bool isUnicode);
 
 /*
  * "Releases" the given key.
  *
- * Pre: If the given key is a unicode value, isUnicode must be true.
- * Else, it must be false.
- *
- * Post: The given key is "released."
+ * @param virtualKey The id of the virtual key.
+ * @param isUnicode Whether the virtual key stands for a unicode character.
  */
 void releaseVirtualKey(int virtualKey, bool isUnicode);
 
@@ -67,36 +55,30 @@ class KeyEvent {
 		/*
 		 * Creates a new key event.
 		 *
-		 * Pre: None.
-		 *
-		 * Post: A new key event is created.
+		 * @param virtualKey The id of the virtual key.
+		 * @param flags The flags that represent the key's state.
+		 * @param timesPulled The number of times the key has been updated since initial press.
 		 */
 		KeyEvent(int virtualKey, short flags, unsigned int timesPulled);
 
 		/*
 		 * Gets the key that was changed.
 		 *
-		 * Pre: None.
-		 *
-		 * Post: Returns the key that was changed.
+		 * @returns The key that was changed.
 		 */
 		int getKey();
 
 		/*
 		 * Gets the flags that represent the changed key's state.
 		 *
-		 * Pre: None.
-		 *
-		 * Post: Returns the flags that represent the changed key's state.
+		 * @returns The flags that represent the changed key's state.
 		 */
 		short getFlags();
 
 		/*
 		 * Gets the number of times the key has been updated since initial press.
 		 *
-		 * Pre: None.
-		 *
-		 * Post: Returns the number of times the key has been updated since initial press.
+		 * @returns The number of times the key has been updated since initial press.
 		 */
 		unsigned int getTimesPulled();
 
@@ -117,45 +99,33 @@ class KeyboardListener {
 		/*
 		 * Initializes KeyboardListener.
 		 *
-		 * Pre: KeyboardListener is not already initialized.
-		 *
-		 * Post: KeyboardListener is initialized.
+		 * @throws std::logic_error If KeyboardListener is already initialized.
 		 */
 		static void initialize();
 
 		/*
 		 * Uninitializes KeyboardListener.
 		 *
-		 * Pre: KeyboardListener is initialized.
-		 *
-		 * Post: KeyboardListener is uninitialized.
+		 * @throws std::logic_error If KeyboardListener is not already initialized.
 		 */
 		static void uninitialize();
 
 		/*
 		 * Checks for changes in the keyboard's state and notifies key listeners.
-		 *
-		 * Pre: KeyboardListener is initialized.
-		 *
-		 * Post: The key listeners are notified if anything changes.
 		 */
 		static void tick();
 
 		/*
 		 * Registers a listener to be called when the keyboard's state changes.
 		 *
-		 * Pre: The listener is not already registered
-		 *
-		 * Post: The listener will now be called when the keyboard's state changes.
+		 * @param listener The listener to be called when the keyboard's state changes.
 		 */
 		static void registerListener(KeyListener listener);
 
 		/*
 		 * Unregisters a listener, so it will no longer be called when the keyboard's state changes.
 		 *
-		 * Pre: The listener is registered.
-		 *
-		 * Post: The listener will no longer be called when the keyboard's state changes.
+		 * @param listener The listener to unregister.
 		 */
 		static void unregisterListener(KeyListener listener);
 };

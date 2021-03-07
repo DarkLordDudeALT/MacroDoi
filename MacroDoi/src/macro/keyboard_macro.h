@@ -1,10 +1,6 @@
-//============================================================================
-// Name        : keyboard_macro.h
-// Author      : Epiphany
-// Version     : null
-// Copyright   : I don't care lol
-// Description : Contains stuff for macros that interact with the keyboard
-//============================================================================
+/**
+ * Contains stuff for macros that interact with the keyboard.
+ */
 
 #pragma once
 
@@ -22,18 +18,14 @@ class KeyboardMacros {
 		/*
 		 * Initializes KeyboardActivator and KeyboardExecutor.
 		 *
-		 * Pre: They are not already initialized. They must be initialized beforehand.
-		 *
-		 * Post: They are initialized.
+		 * @throws std::logic_error If KeyboardMacros is already initialized.
 		 */
 		static void initialize();
 
 		/*
 		 * Uninitializes KeyboardActivator and KeyboardExecutor.
 		 *
-		 * Pre: They are already initialized. They must not be uninitialized beforehand.
-		 *
-		 * Post: They are uninitialized.
+		 * @throws std::logic_error If KeyboardMacros is not already initialized.
 		 */
 		static void uninitialize();
 };
@@ -44,41 +36,31 @@ class KeyboardMacros {
 class KeyboardActivator : public BaseMacroActivator {
 	public:
 		/*
-		 * Creates a new keyboard activator. The key-sequence is copied from activationKeys.
-		 * reactionTime is the amount of time the user has to press the next key, or else it will reset.
+		 * Creates a new keyboard activator.
 		 *
-		 * Pre: activationKeys must have at least one element. Note: having only one element will lead to the macro repeating itself,
-		 * as Windows sends multiple messages for held keys.
+		 * @param activationKeys The key sequence needed to activate the macro. If only one key is present the activator will stutter as Windows tends to send
+		 * multiple events on a single key press.
+		 * @param reactionTime The amount of time the user has to press the next key before the activator resets.
 		 *
-		 * Post: A new keyboard activator is created.
+		 * @throws std::length_error If activationKeys has a length less than 1.
 		 */
 		KeyboardActivator(std::vector<int> activationKeys, double reactionTime);
 
 		/*
 		 * Creates a copy of a keyboard activator.
 		 *
-		 * Pre: None.
-		 *
-		 * Post: A new keyboard activator is created.
+		 * @param otherActivator The activator to copy.
 		 */
 		KeyboardActivator(const KeyboardActivator& otherActivator);
 
-		/*
-		 * Destroys a keyboard activator.
-		 *
-		 * Pre: None.
-		 *
-		 * Post: A keyboard activator is destroyed.
-		 */
 		~KeyboardActivator();
 
 		/*
 		 * Tests to see if the key-sequence has been entered, and returns the result.
-		 * deltaTime represents the time since last execution.
 		 *
-		 * Pre: None.
+		 * @param deltaTime The amount of time since the last attempt to activate.
 		 *
-		 * Post: The result is returned.
+		 * @returns Whether the key-sequence has been entered.
 		 */
 		bool tryActivate(double deltaTime) override;
 
@@ -103,50 +85,39 @@ class KeyboardActivator : public BaseMacroActivator {
 class KeyAction {
 	public:
 		/*
-		 * Creates a new key action. Only here for arrays.
-		 *
-		 * Pre: None.
-		 *
-		 * Post: A new key action is created..
+		 * Creates a new key action. Only here for array initialization, do not use.
 		 */
 		KeyAction();
 
 		/*
-		 * Creates a new key action. Flags are in big-edian order.
-		 * If the first flag is set, the value represents a time, in milliseconds, to wait.
-		 * If the second flag is set, the value represents a Unicode character.
-		 * Else, the value represents a Windows virtual key.
+		 * Creates a new key action.
 		 *
-		 * Pre: None.
+		 * @param value If the first flag is set, the value represents a time, in milliseconds, to wait. If the second flag is set, it represents a Unicode
+		 * character. Otherwise, it represents a Windows virtual key code.
+		 * @param flags Decides what the value stands for. Flags are in big-edian order.
 		 *
-		 * Post: A new key action is created.
+		 * @throws std::invalid_argument If both the first and second flags are set.
 		 */
 		KeyAction(int value, int flags);
 
 		/*
 		 * Gets the value of the key action.
 		 *
-		 * Pre: None.
-		 *
-		 * Post: Returns the value of the key action.
+		 * @returns The value of the key action.
 		 */
 		int getValue();
 
 		/*
 		 * Gets whether or not this action represents a wait action.
 		 *
-		 * Pre: None.
-		 *
-		 * Post: Returns whether or not this action represents a wait action.
+		 * @returns Whether or not this action represents a wait action.
 		 */
 		bool isWait();
 
 		/*
 		 * Gets whether or not this action represents a Unicode key.
 		 *
-		 * Pre: None.
-		 *
-		 * Post: Returns whether or not this action represents a Unicode key.
+		 * @returns Whether or not this action represents a Unicode key.
 		 */
 		bool isUnicode();
 
@@ -162,39 +133,25 @@ class KeyAction {
 class KeyboardExecutor : public BaseMacroExecutor {
 	public:
 		/*
-		 * Creates a new keyboard executor, copying from a vector of key actions that represent what it should do.
+		 * Creates a new keyboard executor, copying from a vector of key actions that represent what it should do when activated.
 		 *
-		 * Pre: keys must have at least one element.
+		 * @param keys The key actions that represent what it should do when activated.
 		 *
-		 * Post: A new keyboard executor is created.
+		 * @throws std::length_error If keys has a length less than 1.
 		 */
 		KeyboardExecutor(std::vector<KeyAction> keys);
 
 		/*
 		 * Creates a copy of a keyboard executor.
 		 *
-		 * Pre: None.
-		 *
-		 * Post: A new keyboard executor is created.
+		 * @param otherExecutor The executor to copy.
 		 */
 		KeyboardExecutor(const KeyboardExecutor& otherExecutor);
 
-		/*
-		 * Destroys a keyboard executor.
-		 *
-		 * Pre: None.
-		 *
-		 * Post: A keyboard executor is destroyed.
-		 */
 		~KeyboardExecutor();
 
 		/*
-		 * Executes the functions of this macro.
-		 * Those functions include synthesizing key presses, and waiting.
-		 *
-		 * Pre: None.
-		 *
-		 * Post: The functions of this macro are executed.
+		 * Executes the functions of the macro.
 		 */
 		void execute() override;
 

@@ -1,10 +1,6 @@
-//============================================================================
-// Name        : macro_loader.cpp
-// Author      : Epiphany
-// Version     : null
-// Copyright   : I don't care lol
-// Description : Loads macros from file, allowing easy user-level configuration
-//============================================================================
+/**
+ * Loads macros from file, allowing easy user-level configuration.
+ */
 
 #pragma once
 
@@ -22,58 +18,47 @@ class MacroLoader {
 	public:
 		/*
 		 * Loads macros from file.
+		 * Exits and alerts the user if the file cannot be found.
 		 *
-		 * Pre: Macros are not already loaded. Constructors are registered. macros.txt exists.
-		 *
-		 * Post: Any valid macros are loaded from macros.txt.
+		 * @throws std::logic_error If the macros are already loaded.
 		 */
 		static void loadMacrosFromFile();
 
 		/*
 		 * Unloads macros and unregisters constructors.
 		 *
-		 * Pre: Macros are loaded.
-		 *
-		 * Post: Macros are no longer loaded.
+		 * @throws std::logic_error If the macros are not already loaded.
 		 */
 		static void unloadMacros();
 
 		/*
 		 * Registers an activator constructor under the given key.
-		 * The key is what users specify in-file to pick an activator.
 		 *
-		 * Pre: The constructor is not already registered.
-		 *
-		 * Post: The constructor will now be called if a user specifies for it.
+		 * @param key Name of the activator. Users use this to specify which activator to use.
+		 * @param constructor The constructor method for the activator.
 		 */
 		static void registerConstructor(std::string key, ActivatorConstructor constructor);
 
 		/*
 		 * Registers an executor constructor under the given key.
-		 * The key is what users specify in-file to pick an executor.
 		 *
-		 * Pre: The constructor is not already registered.
-		 *
-		 * Post: The constructor will now be called if a user specifies for it.
+		 * @param key Name of the executor. Users use this to specify which executor to use.
+		 * @param constructor The constructor method for the executor.
 		 */
 		static void registerConstructor(std::string key, ExecutorConstructor constructor);
 
 		/*
 		 * Unregisters a constructor under the given key.
-		 * The key is what users specify in-file to pick an activator or executor.
 		 *
-		 * Pre: The constructor is registered.
-		 *
-		 * Post: The constructor is no longer registered.
+		 * @param key Name of the activator/executor. Users use this to specify which activator/executor to use.
+		 * @param isExecutor Whether the constructor is for an executor or an activator.
 		 */
 		static void unregisterConstructor(std::string key, bool isExecutor);
 
 		/*
 		 * Steps forward all loaded macros.
 		 *
-		 * Pre: None.
-		 *
-		 * Post: All loaded macros are ticked.
+		 * @param deltaTime The amount of time that has passed since the last tick.
 		 */
 		static void tick(double deltaTime);
 };
