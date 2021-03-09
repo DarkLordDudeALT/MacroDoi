@@ -10,10 +10,10 @@
 
 using namespace std;
 
-// TODO Have key macros operate on their own timers and threads so that others can activate.
 // TODO Have constructor error messages be more useful.
 // TODO Label components. When one is executed, all following activators are activated. Resets at end of file or when another is activated.
 // TODO Pass components. When one is executed, it does nothing. When one is activated, it activates the macro, no questions asked.
+// TODO Add unit testing.
 
 int main() {
 	KeyboardListener::initialize();

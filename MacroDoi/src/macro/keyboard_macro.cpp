@@ -583,79 +583,83 @@ KeyboardExecutor::~KeyboardExecutor() {
 }
 
 void KeyboardExecutor::execute() {
-	unsigned char heldKeys = 0b000;
+	std::thread executionThread([](KeyboardExecutor* executor) {
+		unsigned char heldKeys = 0b000;
 
-	for (size_t i = 0; i < keysLength; i++) {
-		KeyAction& key = keys[i];
-		int keyCode = key.getValue();
+		for (size_t i = 0; i < executor->keysLength; i++) {
+			KeyAction& key = executor->keys[i];
+			int keyCode = key.getValue();
 
-		if (!key.isWait()) {
-			if (!key.isUnicode()) {
-				switch (keyCode) {
-					// The following 3 cases hold down certain keys.
-					case VK_SHIFT:
-						if (!(heldKeys & 0b001)) {
-							heldKeys |= 0b001;
-							holdVirtualKey(VK_SHIFT, false);
-						}
+			if (!key.isWait()) {
+				if (!key.isUnicode()) {
+					switch (keyCode) {
+						// The following 3 cases hold down certain keys.
+						case VK_SHIFT:
+							if (!(heldKeys & 0b001)) {
+								heldKeys |= 0b001;
+								holdVirtualKey(VK_SHIFT, false);
+							}
 
-						break;
+							break;
 
-					case VK_CONTROL:
-						if (!(heldKeys & 0b010)) {
-							heldKeys |= 0b010;
-							holdVirtualKey(VK_CONTROL, false);
-						}
+						case VK_CONTROL:
+							if (!(heldKeys & 0b010)) {
+								heldKeys |= 0b010;
+								holdVirtualKey(VK_CONTROL, false);
+							}
 
-						break;
+							break;
 
-					case VK_MENU:
-						if (!(heldKeys & 0b100)) {
-							heldKeys |= 0b100;
-							holdVirtualKey(VK_CONTROL, false);
-						}
+						case VK_MENU:
+							if (!(heldKeys & 0b100)) {
+								heldKeys |= 0b100;
+								holdVirtualKey(VK_CONTROL, false);
+							}
 
-						break;
+							break;
 
-					default:
-						pressVirtualKey(keyCode, false);
+						default:
+							pressVirtualKey(keyCode, false);
 
-						// Releases held keys.
-						if (heldKeys) {
-							if (heldKeys & 0b001)
-								releaseVirtualKey(VK_SHIFT, false);
+							// Releases held keys.
+							if (heldKeys) {
+								if (heldKeys & 0b001)
+									releaseVirtualKey(VK_SHIFT, false);
 
-							if (heldKeys & 0b010)
-								releaseVirtualKey(VK_CONTROL, false);
+								if (heldKeys & 0b010)
+									releaseVirtualKey(VK_CONTROL, false);
 
-							if (heldKeys & 0b100)
-								releaseVirtualKey(VK_MENU, false);
+								if (heldKeys & 0b100)
+									releaseVirtualKey(VK_MENU, false);
 
-							heldKeys = 0;
-						}
+								heldKeys = 0;
+							}
+					}
+
+				} else {
+					pressVirtualKey(keyCode, true);
+
+					// Releases held keys.
+					if (heldKeys) {
+						if (heldKeys & 0b001)
+							releaseVirtualKey(VK_SHIFT, false);
+
+						if (heldKeys & 0b010)
+							releaseVirtualKey(VK_CONTROL, false);
+
+						if (heldKeys & 0b100)
+							releaseVirtualKey(VK_MENU, false);
+
+						heldKeys = 0;
+					}
 				}
 
-			} else {
-				pressVirtualKey(keyCode, true);
+			} else
+				this_thread::sleep_for(chrono::milliseconds(keyCode));
+		}
+	}, this);
 
-				// Releases held keys.
-				if (heldKeys) {
-					if (heldKeys & 0b001)
-						releaseVirtualKey(VK_SHIFT, false);
-
-					if (heldKeys & 0b010)
-						releaseVirtualKey(VK_CONTROL, false);
-
-					if (heldKeys & 0b100)
-						releaseVirtualKey(VK_MENU, false);
-
-					heldKeys = 0;
-				}
-			}
-
-		} else
-			this_thread::sleep_for(chrono::milliseconds(keyCode));
-	}
+	executionThread.detach();
 }
 
 
