@@ -362,32 +362,59 @@ static BaseMacroActivator* createActivator(std::string& data) {
 	std::stringstream stream(data);
 	std::string token;
 
+
 	// Gets activation keys.
-	if (!std::getline(stream, token, ';')) {
-		std::cout << "Unable to find key sequence for key activator from: " << data << std::endl;
+	if (!std::getline(stream, token, ';') || token == " ") {
+		std::cout << "ERROR: Unable to find activator parameters in activator parameters (" << data << "). Must contain a set of activation keys and a "
+				"reaction time. View the Wiki for details: https://github.com/ona-li-toki-e-jan-Epiphany-tawa-mi/MacroDoi/wiki/Key-Macros" << std::endl;
 		return nullptr;
 	}
 
+	if (stream.str().length() == token.length()) {
+		std::cout << "ERROR: Unable to find activation keys/reaction time separator ';' in activator parameters (" << data << ")." << std::endl;
+		return nullptr;
+	}
+
+	// Parses activation keys.
 	{
 		std::stringstream listStream(token);
 		std::string listToken;
+		bool charactersRejected = false;
 
 		while (std::getline(listStream, listToken, ',')) {
 			int keyCode = getKeyFromString(listToken);
 
-			if (keyCode != -1)
+			if (keyCode != -1) {
 				keys.push_back(keyCode);
+
+			// Prints out rejected keys.
+			} else {
+				if (!charactersRejected) {
+					charactersRejected = true;
+					std::cout << "Rejected activation keys: " << listToken;
+
+				} else
+					std::cout << ", " << listToken;
+			}
 		}
+
+		if (charactersRejected)
+			std::cout << std::endl;
 	}
 
 	if (!keys.size()) {
-		std::cout << "Error: There must be at least one valid key. Rejected: " << data << std::endl;
+		std::cout << "ERROR: Unable to find any valid key value in activator parameters (" << data << "). View the Wiki for details: "
+				"https://github.com/ona-li-toki-e-jan-Epiphany-tawa-mi/MacroDoi/wiki/Key-Macros" << std::endl;
 		return nullptr;
 	}
 
+
 	// Gets reaction time.
-	if (!std::getline(stream, token, ';')) {
-		std::cout << "Unable to find reaction time for key activator from: " << data << std::endl;
+	std::getline(stream, token, ';');
+
+	if (stream.str().length() == token.length()) {
+		std::cout << "ERROR: Unable to find reaction time in activator parameters (" << data << "). View the Wiki for details: "
+				"https://github.com/ona-li-toki-e-jan-Epiphany-tawa-mi/MacroDoi/wiki/Key-Macros" << std::endl;
 		return nullptr;
 	}
 
@@ -395,12 +422,12 @@ static BaseMacroActivator* createActivator(std::string& data) {
 		reactionTime = std::stod(token);
 
 	} catch(std::invalid_argument& exception) {
-		std::cout << "Unable to find reaction time for key activator from: " << data << std::endl;
+		std::cout << "ERROR: Unable to parse reaction time from (" << data << "). '" << token << "' is not a valid number representation." << std::endl;
 		return nullptr;
 	}
 
 	if (reactionTime <= 0) {
-		std::cout << "Error: Reaction time must be greater than zero. Rejected: " << data << std::endl;
+		std::cout << "ERROR: Reaction time must be greater than zero. Rejected: " << reactionTime << "." << std::endl;
 		return nullptr;
 	}
 
@@ -531,26 +558,52 @@ static BaseMacroExecutor* createExecutor(std::string& data) {
 
 	std::stringstream stream(data);
 	std::string token;
+	bool charactersRejected = false;
 
+	// Parses keyboard actions.
 	while (std::getline(stream, token, ',')) {
 		size_t size = token.size();
 
-		if (size > 4 && token[0] == 'W' && token[1] == 'A' && token[2] == 'I' && token[3] == 'T') {
+		// Parses WAIT instructions.
+		if (size > 4 && token.substr(0, 4) == "WAIT") {
 			try {
 				keyActions.push_back(KeyAction(std::stoi(token.substr(4, size)), 0b01));
 
-			} catch(std::invalid_argument& exception) {}
+			} catch(std::invalid_argument& exception) {
+				// Prints out rejected WAIT instructions.
+				if (!charactersRejected) {
+					charactersRejected = true;
+					std::cout << "Rejected executor key actions: " << token;
 
+				} else
+					std::cout << ", " << token << "('" << token.substr(4, size) << "' is not a valid number representation)";
+			}
+
+		// Parses KEY key actions.
 		} else {
 			int keyCode = getKeyFromString(token);
 
-			if (keyCode != -1)
+			if (keyCode != -1) {
 				keyActions.push_back(KeyAction(keyCode, 0b00));
+
+			// Prints out rejected key actions.
+			} else {
+				if (!charactersRejected) {
+					charactersRejected = true;
+					std::cout << "Rejected executor key actions: " << token;
+
+				} else
+					std::cout << ", " << token;
+			}
 		}
 	}
 
+	if (charactersRejected)
+		std::cout << std::endl;
+
 	if (!keyActions.size()) {
-		std::cout << "Error: There must be at least one valid key. Rejected: " << data << std::endl;
+		std::cout << "ERROR: Unable to find any valid key action in executor parameters (" << data << "). View the Wiki for details: "
+				"https://github.com/ona-li-toki-e-jan-Epiphany-tawa-mi/MacroDoi/wiki/Key-Macros" << std::endl;
 		return nullptr;
 	}
 
@@ -582,6 +635,7 @@ KeyboardExecutor::~KeyboardExecutor() {
 	delete[] keys;
 }
 
+// TODO Clean Up.
 void KeyboardExecutor::execute() {
 	std::thread executionThread([](KeyboardExecutor* executor) {
 		unsigned char heldKeys = 0b000;

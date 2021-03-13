@@ -26,8 +26,8 @@ void MacroLoader::loadMacrosFromFile() {
 	macroFile.open("macros.txt");
 
 	if (!macroFile.is_open()) {
-		// TODO Add error message of what went wrong.
-		std::cout << "ERROR: Could not open file 'macros.txt'." << std::endl;
+		std::cout << "ERROR: Could not open file 'macros.txt':" << std::endl;
+		std::cerr << "\t" << strerror(errno) << std::endl << std::endl;
 
 		std::cout << "Press ENTER or RETURN to exit the program.";
 		std::cin.get();
@@ -57,12 +57,12 @@ void MacroLoader::loadMacrosFromFile() {
 		bool fail = false;
 
 		// Gets activator.
-		if (std::getline(lineStream, token, '|') && (unsigned) lineStream.str().length() != token.size()) {
+		if (std::getline(lineStream, token, '|') && lineStream.str().length() != token.length()) {
 			std::stringstream activatorStream(token);
 			std::string secondaryToken;
 
 			// Gets activator name.
-			if (std::getline(activatorStream, secondaryToken, ':') && (unsigned) activatorStream.str().length() != secondaryToken.size()) {
+			if (std::getline(activatorStream, secondaryToken, ':') && activatorStream.str().length() != secondaryToken.length()) {
 				std::string activatorName(secondaryToken);
 
 				// Finds correct constructor, gets activator parameters, and creates a new activator.
@@ -88,7 +88,7 @@ void MacroLoader::loadMacrosFromFile() {
 		BaseMacroExecutor* executor;
 
 		if (fail || !activator) {
-			std::cout << "Unable to find activator from line " << currentLine << " (" << line << ")." << std::endl << std::endl;
+			std::cout << "Unable to create activator from line " << currentLine << " (" << line << ")." << std::endl << std::endl;
 			continue;
 		}
 
@@ -98,7 +98,7 @@ void MacroLoader::loadMacrosFromFile() {
 			std::string secondaryToken;
 
 			// Gets executor name.
-			if (std::getline(executorStream, secondaryToken, ':') && (unsigned) executorStream.str().length() != secondaryToken.size()) {
+			if (std::getline(executorStream, secondaryToken, ':') && executorStream.str().length() != secondaryToken.length()) {
 				std::string executorName(secondaryToken);
 
 				// Finds correct constructor, gets executor parameters, and creates a new executor.
@@ -118,7 +118,7 @@ void MacroLoader::loadMacrosFromFile() {
 		}
 
 		if (fail || !executor) {
-			std::cout << "Unable to find executor from line " << currentLine << " (" << line << ")." << std::endl << std::endl;
+			std::cout << "Unable to create executor from line " << currentLine << " (" << line << ")." << std::endl << std::endl;
 			delete activator;
 
 		} else
@@ -135,7 +135,7 @@ void MacroLoader::loadMacrosFromFile() {
 		exit(-1);
 	}
 
-	std::cout << "Macros loaded." << std::endl;
+	std::cout << loadedMacros.size() << " macros loaded." << std::endl;
 
 	loaded = true;
 }

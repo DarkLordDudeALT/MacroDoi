@@ -10,7 +10,6 @@
 
 using namespace std;
 
-// TODO Have constructor error messages be more useful.
 // TODO Add unit testing.
 
 // TODO Label components. When one is executed, all following activators are activated. Resets at end of file or when another is activated.
