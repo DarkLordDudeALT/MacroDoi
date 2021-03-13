@@ -26,19 +26,24 @@ void MacroLoader::loadMacrosFromFile() {
 	macroFile.open("macros.txt");
 
 	if (!macroFile.is_open()) {
-		std::cout << "Could not open file 'macros.txt', make sure to create it" << std::endl << "exiting program" << std::endl;
+		// TODO Add error message of what went wrong.
+		std::cout << "ERROR: Could not open file 'macros.txt'." << std::endl;
+
+		std::cout << "Press ENTER or RETURN to exit the program.";
+		std::cin.get();
 		exit(EXIT_FAILURE);
 	}
 
-	for (std::string line; std::getline(macroFile, line);) {
+	unsigned long int currentLine = 0;
+	for (std::string line; std::getline(macroFile, line); currentLine++) {
 		BaseMacroActivator* activator;
 
-		// Removes comments.
+		// Removes comments starting from the delimiter to the end of the string.
 		size_t findResult = line.find('#');
-
 		if (findResult != (size_t) -1)
 			line.replace(findResult, line.length() - findResult, "");
 
+		// Removes whitespace characters.
 		for (auto lineIterator = line.begin(); lineIterator < line.end(); lineIterator++)
 			if (*lineIterator == ' ' || *lineIterator == '\n' || *lineIterator == '\r' || *lineIterator == '\t')
 				line.erase(lineIterator);
@@ -46,34 +51,44 @@ void MacroLoader::loadMacrosFromFile() {
 		if (line == "")
 			continue;
 
+
 		std::stringstream lineStream(line);
 		std::string token;
 		bool fail = false;
 
 		// Gets activator.
-		if (std::getline(lineStream, token, '|')) {
+		if (std::getline(lineStream, token, '|') && (unsigned) lineStream.str().length() != token.size()) {
 			std::stringstream activatorStream(token);
 			std::string secondaryToken;
 
-			if (std::getline(activatorStream, secondaryToken, ':')) {
+			// Gets activator name.
+			if (std::getline(activatorStream, secondaryToken, ':') && (unsigned) activatorStream.str().length() != secondaryToken.size()) {
 				std::string activatorName(secondaryToken);
 
-				if (activatorConstructors.find(activatorName) != activatorConstructors.end() && std::getline(activatorStream, secondaryToken, '|')) {
+				// Finds correct constructor, gets activator parameters, and creates a new activator.
+				if (activatorConstructors.find(activatorName) != activatorConstructors.end()) {
+					std::getline(activatorStream, secondaryToken, '|');
 					activator = activatorConstructors.at(activatorName)(secondaryToken);
 
-				} else
+				} else {
+					std::cout << "ERROR: " << activatorName << " is not a known activator type." << std::endl;
 					fail = true;
+				}
 
-			} else
+			} else {
+				std::cout << "ERROR: Unable to find activator name/elements separator ':'." << std::endl;
 				fail = true;
+			}
 
-		} else
+		} else {
+			std::cout << "ERROR: Unable to find activator/executor separator '|'. Must be located between activator and separator deceleration." << std::endl;
 			fail = true;
+		}
 
 		BaseMacroExecutor* executor;
 
 		if (fail || !activator) {
-			std::cout << "Unable to find activator from: " << line << std::endl;
+			std::cout << "Unable to find activator from line " << currentLine << " (" << line << ")." << std::endl << std::endl;
 			continue;
 		}
 
@@ -82,23 +97,28 @@ void MacroLoader::loadMacrosFromFile() {
 			std::stringstream executorStream(token);
 			std::string secondaryToken;
 
-			if (std::getline(executorStream, secondaryToken, ':')) {
+			// Gets executor name.
+			if (std::getline(executorStream, secondaryToken, ':') && (unsigned) executorStream.str().length() != secondaryToken.size()) {
 				std::string executorName(secondaryToken);
 
-				if (executorConstructors.find(executorName) != executorConstructors.end() && std::getline(executorStream, secondaryToken, '|')) {
+				// Finds correct constructor, gets executor parameters, and creates a new executor.
+				if (executorConstructors.find(executorName) != executorConstructors.end()) {
+					std::getline(executorStream, secondaryToken, '|');
 					executor = executorConstructors.at(executorName)(secondaryToken);
 
-				} else
+				} else {
+					std::cout << "ERROR: " << executorName << " is not a known executor type." << std::endl;
 					fail = true;
+				}
 
-			} else
+			} else {
+				std::cout << "ERROR: Unable to find executor name/elements separator ':'." << std::endl;
 				fail = true;
-
-		} else
-			fail = true;
+			}
+		}
 
 		if (fail || !executor) {
-			std::cout << "Unable to find executor from: " << line << std::endl;
+			std::cout << "Unable to find executor from line " << currentLine << " (" << line << ")." << std::endl << std::endl;
 			delete activator;
 
 		} else
@@ -108,11 +128,14 @@ void MacroLoader::loadMacrosFromFile() {
 	macroFile.close();
 
 	if (!loadedMacros.size()) {
-		std::cout << "Unable to load any macros. Exiting program" << std::endl;
+		std::cout << "Unable to load any macros." << std::endl;
+
+		std::cout << "Press ENTER or RETURN to exit the program.";
+		std::cin.get();
 		exit(-1);
 	}
 
-	std::cout << std::endl << "Macros loaded." << std::endl;
+	std::cout << "Macros loaded." << std::endl;
 
 	loaded = true;
 }

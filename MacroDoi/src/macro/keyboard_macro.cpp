@@ -404,8 +404,8 @@ static BaseMacroActivator* createActivator(std::string& data) {
 		return nullptr;
 	}
 
-	std::cout << "Created a keyboard activator with " << keys.size() << " keys and a reaction time of " << reactionTime << " from the string: "
-			<< data << std::endl;
+	std::cout << "Created a keyboard activator with " << keys.size() << " keys and a reaction time of " << reactionTime << " from the string: " << data
+			<< std::endl;
 
 	return new KeyboardActivator(keys, reactionTime);
 }
@@ -554,7 +554,7 @@ static BaseMacroExecutor* createExecutor(std::string& data) {
 		return nullptr;
 	}
 
-	std::cout << "Created a keyboard executor with " << keyActions.size() << " key actions from the string: " << data << std::endl;
+	std::cout << "Created a keyboard executor with " << keyActions.size() << " key actions from the string: " << data << std::endl << std::endl;
 
 	return new KeyboardExecutor(keyActions);
 }

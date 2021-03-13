@@ -11,9 +11,11 @@
 using namespace std;
 
 // TODO Have constructor error messages be more useful.
+// TODO Add unit testing.
+
 // TODO Label components. When one is executed, all following activators are activated. Resets at end of file or when another is activated.
 // TODO Pass components. When one is executed, it does nothing. When one is activated, it activates the macro, no questions asked.
-// TODO Add unit testing.
+// TODO Add a way to hide the terminal.
 
 int main() {
 	KeyboardListener::initialize();
